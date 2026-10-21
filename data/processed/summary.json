@@ -1,0 +1,34 @@
+{
+  "source_url": "https://api.tvmaze.com/shows?page=0",
+  "total_records": 240,
+  "shows_per_genre": {
+    "Drama": 154,
+    "Science-Fiction": 39,
+    "Thriller": 41,
+    "Action": 55,
+    "Crime": 57,
+    "Horror": 21,
+    "Romance": 32,
+    "Adventure": 23,
+    "Espionage": 2,
+    "Music": 3,
+    "Mystery": 15,
+    "Supernatural": 18,
+    "Fantasy": 13,
+    "Family": 21,
+    "Anime": 4,
+    "Comedy": 66,
+    "History": 4,
+    "Medical": 6,
+    "Legal": 6,
+    "Western": 3,
+    "War": 4,
+    "Sports": 2
+  },
+  "shows_per_decade": {
+    "2010s": 179,
+    "2000s": 51,
+    "1990s": 8,
+    "1980s": 2
+  }
+}

@@ -12,11 +12,11 @@ logger = logging.getLogger(__name__)
 class ReportWriter:
     """Write summary data to a JSON file."""
 
-    def __init__(self, output_path):
+    def __init__(self, output_path: str | Path) -> None:
         """Initialize the report writer."""
         self.output_path = Path(output_path)
 
-    def write(self, summary):
+    def write(self, summary: dict[str, object]) -> None:
         """Save the summary as formatted JSON."""
         try:
             self.output_path.parent.mkdir(parents=True, exist_ok=True)

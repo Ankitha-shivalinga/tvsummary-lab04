@@ -11,7 +11,7 @@ from tvsummary.models import ShowRecord
 logger = logging.getLogger(__name__)
 
 
-def parse_records(data):
+def parse_records(data: object) -> list[ShowRecord]:
     """Turn the decoded API response into ShowRecord objects."""
     if not isinstance(data, list):
         raise ResponseFormatError(
@@ -25,12 +25,12 @@ def parse_records(data):
 class TVMazeSource:
     """Fetch TV show records from TVMaze."""
 
-    def __init__(self, url=SOURCE_URL, timeout=TIMEOUT):
+    def __init__(self, url: str = SOURCE_URL, timeout: float = TIMEOUT) -> None:
         """Initialize the data source."""
         self.url = url
         self.timeout = timeout
 
-    def download(self):
+    def download(self) -> object:
         """Download the shows and return the decoded JSON."""
         logger.info("Downloading shows from %s", self.url)
 
@@ -53,6 +53,6 @@ class TVMazeSource:
                 f"The response from {self.url} is not valid JSON."
             ) from error
 
-    def fetch_records(self):
+    def fetch_records(self) -> list[ShowRecord]:
         """Download records and return ShowRecord objects."""
         return parse_records(self.download())

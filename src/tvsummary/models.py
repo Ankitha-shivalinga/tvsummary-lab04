@@ -9,6 +9,7 @@ class ShowRecord:
         self.name = self._clean_text(record.get("name"))
         self.genres = self._clean_genres(record.get("genres"))
         self.premiered = self._clean_text(record.get("premiered"))
+        self.rating = self._clean_rating(record.get("rating"))
 
     def _clean_text(self, value):
         """Return cleaned text or an empty string."""
@@ -29,6 +30,18 @@ class ShowRecord:
                 genres.append(genre.strip())
 
         return sorted(set(genres))
+
+    def _clean_rating(self, value):
+        """Return the average rating as a float, or None when there is none."""
+        if not isinstance(value, dict):
+            return None
+
+        average = value.get("average")
+
+        if isinstance(average, bool) or not isinstance(average, int | float):
+            return None
+
+        return float(average)
 
     def __str__(self):
         """Return a readable description of the show."""

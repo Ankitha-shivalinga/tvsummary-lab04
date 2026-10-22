@@ -24,3 +24,16 @@ def test_a_record_that_is_not_a_dict_gets_safe_defaults(bad_record):
     assert record.name == ""
     assert record.genres == []
     assert str(record) == "Unknown show"
+
+
+def test_a_rating_is_read_from_the_average():
+    record = ShowRecord({"name": "Test Show", "rating": {"average": 8.5}})
+    assert record.rating == 8.5
+
+
+@pytest.mark.parametrize(
+    "rating", [None, {}, {"average": None}, {"average": "high"}, 7.0]
+)
+def test_a_missing_rating_becomes_none(rating):
+    record = ShowRecord({"name": "Test Show", "rating": rating})
+    assert record.rating is None

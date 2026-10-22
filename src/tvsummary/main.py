@@ -1,7 +1,9 @@
-"""Run the TV show summary program."""
+"""Run the TV show summary program: python -m tvsummary.main"""
 
+import argparse
 import logging
 import sys
+from pathlib import Path
 
 from tvsummary.config import DEFAULT_CONFIG_PATH, load_settings
 from tvsummary.errors import TVSummaryError
@@ -13,13 +15,29 @@ from tvsummary.sources import TVMazeSource
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """Download show records and write their summary."""
+def parse_args(argv: list[str] | None) -> argparse.Namespace:
+    """Read the command line options."""
+    parser = argparse.ArgumentParser(
+        description="Summarize TV show records from the TVMaze API."
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_CONFIG_PATH,
+        help=f"path to the settings file (default: {DEFAULT_CONFIG_PATH})",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the program and return its exit code (0 means success)."""
+    args = parse_args(argv)
     configure_logging("INFO")
 
     try:
-        settings = load_settings(DEFAULT_CONFIG_PATH)
+        settings = load_settings(args.config)
         set_log_level(settings.log_level)
+        logger.info("Read settings from %s", args.config)
 
         source = TVMazeSource(settings.source_url, settings.timeout)
         records = source.fetch_records()
@@ -33,10 +51,11 @@ def main():
     except TVSummaryError as error:
         logger.error("Stopped: %s", error)
         print(f"Error: {error}", file=sys.stderr)
-        return
+        return 1
 
     print(f"Summary saved to {summary_path}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

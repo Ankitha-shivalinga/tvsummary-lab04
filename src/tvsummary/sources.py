@@ -4,7 +4,6 @@ import logging
 
 import requests
 
-from tvsummary.config import SOURCE_URL, TIMEOUT
 from tvsummary.errors import ResponseFormatError, SourceError
 from tvsummary.models import ShowRecord
 
@@ -25,7 +24,7 @@ def parse_records(data: object) -> list[ShowRecord]:
 class TVMazeSource:
     """Fetch TV show records from TVMaze."""
 
-    def __init__(self, url: str = SOURCE_URL, timeout: float = TIMEOUT) -> None:
+    def __init__(self, url: str, timeout: float) -> None:
         """Initialize the data source."""
         self.url = url
         self.timeout = timeout

@@ -3,7 +3,18 @@
 import requests
 
 from tvsummary.config import SOURCE_URL, TIMEOUT
+from tvsummary.errors import ResponseFormatError, SourceError
 from tvsummary.models import ShowRecord
+
+
+def parse_records(data):
+    """Turn the decoded API response into ShowRecord objects."""
+    if not isinstance(data, list):
+        raise ResponseFormatError(
+            f"Expected a list of shows, but the response was a {type(data).__name__}."
+        )
+
+    return [ShowRecord(record) for record in data]
 
 
 class TVMazeSource:
@@ -14,20 +25,27 @@ class TVMazeSource:
         self.url = url
         self.timeout = timeout
 
-    def fetch_records(self):
-        """Download records and return ShowRecord objects."""
+    def download(self):
+        """Download the shows and return the decoded JSON."""
         try:
             response = requests.get(self.url, timeout=self.timeout)
-            response.raise_for_status()
-            records = response.json()
         except requests.RequestException as error:
-            raise RuntimeError(f"Error downloading data: {error}") from None
+            raise SourceError(f"Could not reach {self.url}: {error}") from error
+
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as error:
+            raise SourceError(
+                f"{self.url} answered with HTTP {response.status_code}."
+            ) from error
+
+        try:
+            return response.json()
         except ValueError as error:
-            raise RuntimeError(f"Error reading API response: {error}") from None
+            raise ResponseFormatError(
+                f"The response from {self.url} is not valid JSON."
+            ) from error
 
-        if not isinstance(records, list):
-            raise RuntimeError(
-                "Error reading API response: expected a list of records."
-            )
-
-        return [ShowRecord(record) for record in records]
+    def fetch_records(self):
+        """Download records and return ShowRecord objects."""
+        return parse_records(self.download())

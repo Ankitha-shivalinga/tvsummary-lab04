@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+from tvsummary.errors import ReportError
+
 
 class ReportWriter:
     """Write summary data to a JSON file."""
@@ -13,5 +15,10 @@ class ReportWriter:
 
     def write(self, summary):
         """Save the summary as formatted JSON."""
-        self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        self.output_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+        try:
+            self.output_path.parent.mkdir(parents=True, exist_ok=True)
+            self.output_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+        except OSError as error:
+            raise ReportError(
+                f"Cannot write {self.output_path}: {error.strerror}"
+            ) from error

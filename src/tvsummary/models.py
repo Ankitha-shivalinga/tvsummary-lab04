@@ -1,4 +1,3 @@
-
 class ShowRecord:
     """Represent one TV show record and clean its data."""
 

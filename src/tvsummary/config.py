@@ -1,4 +1,3 @@
-
 """Configuration settings for the TV summary package."""
 
 SOURCE_URL = "https://api.tvmaze.com/shows?page=0"

@@ -1,4 +1,3 @@
-
 """Download TV show records from the TVMaze API."""
 
 import requests
@@ -27,6 +26,8 @@ class TVMazeSource:
             raise RuntimeError(f"Error reading API response: {error}") from None
 
         if not isinstance(records, list):
-            raise RuntimeError("Error reading API response: expected a list of records.")
+            raise RuntimeError(
+                "Error reading API response: expected a list of records."
+            )
 
         return [ShowRecord(record) for record in records]

@@ -1,6 +1,4 @@
-
 """Run the TV show summary program."""
-
 
 from tvsummary.aggregations import (
     DecadeAggregation,
@@ -20,7 +18,7 @@ def main():
     except RuntimeError as error:
         print(error)
         return
-    
+
     aggregations = [
         GenreAggregation(records),
         DecadeAggregation(records),

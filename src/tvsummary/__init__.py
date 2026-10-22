@@ -1,4 +1,3 @@
-
 """Public classes for the TV summary package."""
 
 from tvsummary.aggregations import (

@@ -1,4 +1,3 @@
-
 """Write the TV show summary to a JSON file."""
 
 import json
@@ -15,7 +14,4 @@ class ReportWriter:
     def write(self, summary):
         """Save the summary as formatted JSON."""
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        self.output_path.write_text(
-            json.dumps(summary, indent=2),
-            encoding="utf-8"
-        )
+        self.output_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")

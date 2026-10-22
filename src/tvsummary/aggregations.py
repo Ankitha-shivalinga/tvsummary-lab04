@@ -1,4 +1,3 @@
-
 """Aggregate TV show records into summary counts."""
 
 
@@ -31,12 +30,12 @@ class GenreAggregation(Aggregation):
                 counts[genre] = counts.get(genre, 0) + 1
 
         return counts
-    
+
     @property
     def summary_key(self):
         """Return the genre summary key."""
         return "shows_per_genre"
-    
+
 
 class DecadeAggregation(Aggregation):
     """Count shows by premiere decade."""
@@ -66,6 +65,3 @@ class DecadeAggregation(Aggregation):
     def summary_key(self):
         """Return the decade summary key."""
         return "shows_per_decade"
-
-
-    

@@ -30,5 +30,12 @@
     "2000s": 51,
     "1990s": 8,
     "1980s": 2
-  }
+  },
+  "featured_shows": [
+    "How I Met Your Mother",
+    "American Horror Story",
+    "Homeland",
+    "The Fosters",
+    "The Walking Dead"
+  ]
 }

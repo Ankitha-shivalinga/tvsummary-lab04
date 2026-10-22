@@ -1,9 +1,12 @@
 """Write the TV show summary to a JSON file."""
 
 import json
+import logging
 from pathlib import Path
 
 from tvsummary.errors import ReportError
+
+logger = logging.getLogger(__name__)
 
 
 class ReportWriter:
@@ -22,3 +25,5 @@ class ReportWriter:
             raise ReportError(
                 f"Cannot write {self.output_path}: {error.strerror}"
             ) from error
+
+        logger.info("Wrote %s", self.output_path)

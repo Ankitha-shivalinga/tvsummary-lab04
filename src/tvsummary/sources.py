@@ -1,10 +1,14 @@
 """Download TV show records from the TVMaze API."""
 
+import logging
+
 import requests
 
 from tvsummary.config import SOURCE_URL, TIMEOUT
 from tvsummary.errors import ResponseFormatError, SourceError
 from tvsummary.models import ShowRecord
+
+logger = logging.getLogger(__name__)
 
 
 def parse_records(data):
@@ -14,6 +18,7 @@ def parse_records(data):
             f"Expected a list of shows, but the response was a {type(data).__name__}."
         )
 
+    logger.debug("Received %d show records", len(data))
     return [ShowRecord(record) for record in data]
 
 
@@ -27,6 +32,8 @@ class TVMazeSource:
 
     def download(self):
         """Download the shows and return the decoded JSON."""
+        logger.info("Downloading shows from %s", self.url)
+
         try:
             response = requests.get(self.url, timeout=self.timeout)
         except requests.RequestException as error:

@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 
 from tvsummary.aggregations import Aggregation, DecadeAggregation, GenreAggregation
@@ -41,3 +43,17 @@ def test_each_aggregation_has_its_summary_key(aggregation_class, key):
 def test_the_base_class_must_be_subclassed():
     with pytest.raises(NotImplementedError, match="Subclasses"):
         Aggregation([]).aggregate()
+
+
+def test_a_skipped_show_is_logged_as_a_warning(caplog):
+    records = [ShowRecord({"name": "Bad date", "premiered": "soon"})]
+
+    with caplog.at_level(logging.WARNING):
+        DecadeAggregation(records).aggregate()
+
+    assert "Skipping Bad date: premiere date 'soon' is not usable" in caplog.text
+
+
+def test_a_short_date_is_not_read_as_a_year():
+    records = [ShowRecord({"name": "Short", "premiered": "12"})]
+    assert DecadeAggregation(records).aggregate() == {}

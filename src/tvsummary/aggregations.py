@@ -1,5 +1,9 @@
 """Aggregate TV show records into summary counts."""
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Aggregation:
     """Base class for show aggregations."""
@@ -45,14 +49,14 @@ class DecadeAggregation(Aggregation):
         counts = {}
 
         for record in self.records:
-            premiered = record.premiered
+            year = self._premiere_year(record)
 
-            if len(premiered) < 4:
-                continue
-
-            try:
-                year = int(premiered[:4])
-            except ValueError:
+            if year is None:
+                logger.warning(
+                    "Skipping %s: premiere date %r is not usable",
+                    record,
+                    record.premiered,
+                )
                 continue
 
             decade = (year // 10) * 10
@@ -60,6 +64,16 @@ class DecadeAggregation(Aggregation):
             counts[label] = counts.get(label, 0) + 1
 
         return counts
+
+    def _premiere_year(self, record):
+        """Return the premiere year, or None when the date cannot be read."""
+        if len(record.premiered) < 4:
+            return None
+
+        try:
+            return int(record.premiered[:4])
+        except ValueError:
+            return None
 
     @property
     def summary_key(self):
